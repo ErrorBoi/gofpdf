@@ -2595,9 +2595,9 @@ func (f *Fpdf) SplitLines(txt []byte, w float64) [][]byte {
 // applications that use UTF-8 fonts and depend on having all trailing newlines
 // removed should call strings.TrimRight(txtStr, "\r\n") before calling this
 // method.
-func (f *Fpdf) MultiCell(w, h float64, txtStr, borderStr, alignStr string, fill bool) {
+func (f *Fpdf) MultiCell(w, h float64, txtStr, borderStr, alignStr string, fill bool) int{
 	if f.err != nil {
-		return
+		return 0
 	}
 	// dbg("MultiCell")
 	if alignStr == "" {
@@ -2665,6 +2665,7 @@ func (f *Fpdf) MultiCell(w, h float64, txtStr, borderStr, alignStr string, fill 
 	ls := 0
 	ns := 0
 	nl := 1
+	rowsAdded := 0
 	for i < nb {
 		// Get next character
 		var c rune
@@ -2690,8 +2691,10 @@ func (f *Fpdf) MultiCell(w, h float64, txtStr, borderStr, alignStr string, fill 
 					}
 				}
 				f.CellFormat(w, h, string(srune[j:i]), b, 2, newAlignStr, fill, 0, "")
+				rowsAdded++
 			} else {
 				f.CellFormat(w, h, s[j:i], b, 2, alignStr, fill, 0, "")
+				rowsAdded++
 			}
 			i++
 			sep = -1
@@ -2711,7 +2714,7 @@ func (f *Fpdf) MultiCell(w, h float64, txtStr, borderStr, alignStr string, fill 
 		}
 		if int(c) >= len(cw) {
 			f.err = fmt.Errorf("character outside the supported range: %s", string(c))
-			return
+			return 0
 		}
 		if cw[int(c)] == 0 { //Marker width 0 used for missing symbols
 			l += f.currentFont.Desc.MissingWidth
@@ -2730,8 +2733,10 @@ func (f *Fpdf) MultiCell(w, h float64, txtStr, borderStr, alignStr string, fill 
 				}
 				if f.isCurrentUTF8 {
 					f.CellFormat(w, h, string(srune[j:i]), b, 2, alignStr, fill, 0, "")
+					rowsAdded++
 				} else {
 					f.CellFormat(w, h, s[j:i], b, 2, alignStr, fill, 0, "")
+					rowsAdded++
 				}
 			} else {
 				if alignStr == "J" {
@@ -2744,8 +2749,10 @@ func (f *Fpdf) MultiCell(w, h float64, txtStr, borderStr, alignStr string, fill 
 				}
 				if f.isCurrentUTF8 {
 					f.CellFormat(w, h, string(srune[j:sep]), b, 2, alignStr, fill, 0, "")
+					rowsAdded++
 				} else {
 					f.CellFormat(w, h, s[j:sep], b, 2, alignStr, fill, 0, "")
+					rowsAdded++
 				}
 				i = sep + 1
 			}
@@ -2778,10 +2785,14 @@ func (f *Fpdf) MultiCell(w, h float64, txtStr, borderStr, alignStr string, fill 
 			}
 		}
 		f.CellFormat(w, h, string(srune[j:i]), b, 2, alignStr, fill, 0, "")
+		rowsAdded++
 	} else {
 		f.CellFormat(w, h, s[j:i], b, 2, alignStr, fill, 0, "")
+		rowsAdded++
 	}
 	f.x = f.lMargin
+
+	return rowsAdded
 }
 
 // write outputs text in flowing mode
