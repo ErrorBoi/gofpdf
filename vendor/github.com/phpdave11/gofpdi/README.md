@@ -1,4 +1,8 @@
 # gofpdi
+[![MIT
+licensed](https://img.shields.io/badge/license-MIT-blue.svg)](https://raw.githubusercontent.com/phpdave11/gofpdi/master/LICENSE)
+[![Report](https://goreportcard.com/badge/github.com/phpdave11/gofpdi)](https://goreportcard.com/report/github.com/phpdave11/gofpdi)
+[![GoDoc](https://img.shields.io/badge/godoc-gofpdi-blue.svg)](https://godoc.org/github.com/phpdave11/gofpdi)
 
 ## Go Free PDF Document Importer
 
@@ -6,11 +10,11 @@ gofpdi allows you to import an existing PDF into a new PDF.  The following PDF g
 
 - [gopdf](https://github.com/signintech/gopdf)
 
-- [gofpdf](https://github.com/jung-kurt/gofpdf)
+- [gofpdf](https://github.com/phpdave11/gofpdf)
 
 ## Acknowledgments
 This package’s code is derived from the [fpdi](https://github.com/Setasign/FPDI/tree/1.6.x-legacy) library created by [Jan Slabon](https://github.com/JanSlabon).
-[mrtsbt](https://github.com/mrtsbt) added support for reading a PDF from an `io.ReadSeeker` stream.
+[mrtsbt](https://github.com/mrtsbt) added support for reading a PDF from an `io.ReadSeeker` stream and also added support for using gofpdi concurrently.  [Asher Tuggle](https://github.com/awesomeunleashed) added support for reading PDFs that have split xref tables.
 
 ## Examples
 
@@ -111,8 +115,8 @@ Screenshot of PDF:
 package main
 
 import (
-	"github.com/jung-kurt/gofpdf"
-	"github.com/jung-kurt/gofpdf/contrib/gofpdi"
+	"github.com/phpdave11/gofpdf"
+	"github.com/phpdave11/gofpdf/contrib/gofpdi"
 	"io"
 	"net/http"
 	"os"
@@ -172,7 +176,7 @@ func DownloadFile(filepath string, url string) error {
 }
 ```
 
-Generated PDF:  [example.pdf](https://github.com/jung-kurt/gofpdf/files/3178770/example.pdf)
+Generated PDF:  [example.pdf](https://github.com/phpdave11/gofpdf/files/3178770/example.pdf)
 
 Screenshot of PDF:
 ![example](https://user-images.githubusercontent.com/9421180/57713804-ca8d1300-7638-11e9-9f8e-e3f803374803.jpg)
@@ -186,8 +190,9 @@ package main
 
 import (
     "bytes"
-    "github.com/jung-kurt/gofpdf"
-    "github.com/jung-kurt/gofpdf/contrib/gofpdi"
+    "github.com/phpdave11/gofpdf"
+    "github.com/phpdave11/gofpdf/contrib/gofpdi"
+    "io"
     "io/ioutil"
     "net/http"
 )
@@ -209,7 +214,7 @@ func main() {
     }
 
     // convert []byte to io.ReadSeeker                                                                                                                
-    rs := bytes.NewReader(pdfBytes)
+    rs := io.ReadSeeker(bytes.NewReader(pdfBytes))
 
     // Import in-memory PDF stream with gofpdi free pdf document importer                                                                             
     tpl1 := gofpdi.ImportPageFromStream(pdf, &rs, 1, "/TrimBox")
@@ -223,7 +228,7 @@ func main() {
     gofpdi.UseImportedTemplate(pdf, tpl1, 20, 50, 150, 0)
 
     pdf.SetFont("Helvetica", "", 20)
-    pdf.Cell(0, 0, "Import existing PDF into gofpdf document with gofpdi")
+    pdf.Cell(0, 0, "Import PDF stream into gofpdf document with gofpdi")
 
     err = pdf.OutputFileAndClose("example.pdf")
     if err != nil {

@@ -1,4 +1,5 @@
-# github.com/boombuler/barcode v1.0.0
+# github.com/boombuler/barcode v1.0.1
+## explicit
 github.com/boombuler/barcode
 github.com/boombuler/barcode/aztec
 github.com/boombuler/barcode/codabar
@@ -9,13 +10,16 @@ github.com/boombuler/barcode/ean
 github.com/boombuler/barcode/qr
 github.com/boombuler/barcode/twooffive
 github.com/boombuler/barcode/utils
-# github.com/phpdave11/gofpdi v1.0.7
+# github.com/phpdave11/gofpdi v1.0.13
+## explicit
 github.com/phpdave11/gofpdi
-# github.com/pkg/errors v0.8.1
+# github.com/pkg/errors v0.9.1
 github.com/pkg/errors
-# github.com/ruudk/golang-pdf417 v0.0.0-20181029194003-1af4ab5afa58
+# github.com/ruudk/golang-pdf417 v0.0.0-20201230142125-a7e3863a1245
+## explicit
 github.com/ruudk/golang-pdf417
-# golang.org/x/image v0.0.0-20190910094157-69e4b8554b2a
+# golang.org/x/image v0.0.0-20210607152325-775e3b0c77b9
+## explicit
 golang.org/x/image/ccitt
 golang.org/x/image/tiff
 golang.org/x/image/tiff/lzw
