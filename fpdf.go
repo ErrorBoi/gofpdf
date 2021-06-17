@@ -2933,11 +2933,7 @@ func (f *Fpdf) GetMultiCellHeight(w, h float64, txtStr, borderStr, alignStr stri
 					}
 					f.outf("%.3f Tw", f.ws*f.k)
 				}
-				if f.isCurrentUTF8 {
-					cellsCounter++
-				} else {
-					cellsCounter++
-				}
+				cellsCounter++
 				i = sep + 1
 			}
 			sep = -1
@@ -2968,11 +2964,8 @@ func (f *Fpdf) GetMultiCellHeight(w, h float64, txtStr, borderStr, alignStr stri
 				alignStr = ""
 			}
 		}
-		cellsCounter++
-	} else {
-		cellsCounter++
 	}
-	f.x = f.lMargin
+	cellsCounter++
 
 	return cellsCounter
 }
